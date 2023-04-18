@@ -17,6 +17,75 @@ const Formulario = () => {
     const [edad, setEdad] = useState('')
     const [imagenaleatoria, setImagenAleatoria] = useState('https://picsum.photos/200/299')
 
+    function todoRellenado() {
+        if (!usuario.trim()) {
+            alert('Ingrese un usuario')
+            return false;
+        }
+
+        if (!nombre.trim()) {
+            alert('Ingrese su nombre')
+            return false;
+        }
+
+        if (!NID.trim()) {
+            alert('Ingrese un NID (tiene maximo 9 carácteres)')
+            return false;
+        }
+
+        if (!correo.trim()) {
+            alert('ingrese su correo electronico')
+            return false;
+        }
+
+        if (!direccion.trim()) {
+            alert('Ingrese una dirrecion')
+            return false;
+        }
+
+        if (!telefono.trim()) {
+            alert('Ingrese su numero de telefono')
+            return false;
+        }
+
+        if (!edad.trim()) {
+            alert('Ingrese su edad')
+            return false;
+        }
+
+        return true;
+    }
+
+    function validarUsuario() {
+        if (usuario.length > 8 || usuario.length < 5) {
+            alert("El usuario deber ser máximo de 8 caracteres y mínimo de 5")
+            return false;
+        }
+        return true;
+    }
+
+    function validar_edad() {
+        if (isNaN(edad)) {
+            alert("Edad inválida")
+            return false;
+        } else if (edad < 18) {
+            alert("Debes ser mayor de edad")
+            return false;
+        }
+        return true;
+    }
+
+    function validar_nid() {
+        if (isNaN(NID)) {
+            alert("NID inválida")
+            return false;
+        } else if (NID.length < 9 || NID.length > 9) {
+            alert("El NID es de 9 caracteres")
+            return false;
+        }
+        return true;
+    }
+
     useEffect(() => {
         const obtenerDatos = async () => {
             try {
@@ -38,13 +107,18 @@ const Formulario = () => {
         setDireccion(item.direccion)
         setTelefono(item.telefono)
         setEdad(item.edad)
-        setImagenAleatoria(item.imagenAleatoria)
         setId(item.id)
         setModoEdicion(true)
     }
 
     const editarUsuarios = async e => {
         e.preventDefault();
+
+        if (!todoRellenado(usuario, nombre, NID, correo, direccion, telefono, edad)
+            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID)) {
+            return;
+        }
+
         try {
             const docRef = doc(db, 'usuarioszenhome', id);
             await updateDoc(docRef, {
@@ -55,8 +129,8 @@ const Formulario = () => {
                 direccion: direccion,
                 telefono: telefono,
                 edad: edad,
-                imagenaleatoria: imagenaleatoria
             })
+
             const nuevoArray = listaUsuarios.map(
                 item => item.id === id ? {
                     id: id,
@@ -67,10 +141,11 @@ const Formulario = () => {
                     direccion: direccion,
                     telefono: telefono,
                     edad: edad,
-                    imagenaleatoria: imagenaleatoria
                 } : item
             )
+
             setListaUsuarios(nuevoArray)
+            setModoEdicion(false)
             setUsuario('')
             setNombre('')
             setNID('')
@@ -79,10 +154,10 @@ const Formulario = () => {
             setTelefono('')
             setEdad('')
             setId('')
-            setImagenAleatoria('')
         } catch (error) {
             console.log(error)
         }
+        window.location.reload();
     }
 
     const cancelar = () => {
@@ -100,6 +175,11 @@ const Formulario = () => {
 
     const guardarUsuario = async (e) => {
         e.preventDefault()
+
+        if (!todoRellenado(usuario, nombre, NID, correo, direccion, telefono, edad)
+            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID)) {
+            return;
+        }
         try {
             const data = await addDoc(collection(db, 'usuarioszenhome'), {
                 usuario: usuario,
@@ -185,12 +265,12 @@ const Formulario = () => {
                         <input type="text" className="form-control mb-2" placeholder="Ingrese una dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
                         <input type="text" className="form-control mb-2" placeholder="Ingrese numero de teléfono" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
                         <input type="text" className="form-control mb-2" placeholder="Ingrese su edad" value={edad} onChange={(e) => setEdad(e.target.value)} />
-                        <div class="d-grid gap-2">
+                        <div className="d-grid gap-2">
                             {
                                 modoEdicion ? (
                                     <>
-                                        <button className="btn btn-info col-12" on='submit'>Editar</button>
-                                        <button className='btn btn-dark btn-block' onClick={() => cancelar()}>Cancelar</button>
+                                        <button className="btn btn-info col-12 m-1" on='submit'>Editar</button>
+                                        <button className='btn btn-dark btn-block m-1' onClick={() => cancelar()}>Cancelar</button>
                                     </>
                                 ) :
                                     <button className='btn btn-dark btn-block'>Agregar</button>
