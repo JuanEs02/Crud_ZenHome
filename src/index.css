@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body {
+  background-image: url("C:\Users\jhan9\Desktop\CRUD-REACT-WEBII\zenhome\src\fondo.jpeg");
+  background-size: cover;
+}
