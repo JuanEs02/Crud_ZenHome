@@ -86,6 +86,17 @@ const Formulario = () => {
         return true;
     }
 
+    function validar_numero() {
+        if (isNaN(telefono)) {
+            alert("Número de teléfono inválido")
+            return false;
+        } else if (telefono.length < 10 || telefono.length > 10) {
+            alert("El número de teléfono es de 10 caracteres")
+            return false;
+        }
+        return true;
+    }
+
     useEffect(() => {
         const obtenerDatos = async () => {
             try {
@@ -115,7 +126,7 @@ const Formulario = () => {
         e.preventDefault();
 
         if (!todoRellenado(usuario, nombre, NID, correo, direccion, telefono, edad)
-            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID)) {
+            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID) || !validar_numero(telefono)) {
             return;
         }
 
@@ -177,7 +188,7 @@ const Formulario = () => {
         e.preventDefault()
 
         if (!todoRellenado(usuario, nombre, NID, correo, direccion, telefono, edad)
-            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID)) {
+            || !validarUsuario(usuario) || !validar_edad(edad) || !validar_nid(NID) || !validar_numero(telefono)) {
             return;
         }
         try {
@@ -228,11 +239,11 @@ const Formulario = () => {
 
     return (
         <div className='container mt-5'>
-            <h1 className="text-center">Zen Home</h1>
+            <h1 className="text-center text-light">Zen Home</h1>
             <hr />
             <div className="row">
                 <div className="col-8">
-                    <h4 className="text-center">Lista de Usuarios</h4>
+                    <h4 className="text-center text-light">Lista de Usuarios</h4>
                     <ul className="list-group">
                         {
                             listaUsuarios.map(item => (
@@ -249,14 +260,14 @@ const Formulario = () => {
                                         <img className="img-fluid img-thumbnail rounded text-center" src={item.imagenaleatoria} alt="" /><br></br><br></br>
                                     </span>
                                     <button className='btn btn-danger btn-sm fload-end mx-2' onClick={() => eliminar(item.id)}>Eliminar</button>
-                                    <button className="btn btn-info btn-sm fload-end" onClick={() => editar(item)}>Editar</button>
+                                    <button className="btn btn-dark btn-sm fload-end" onClick={() => editar(item)}>Editar</button>
                                 </li>
                             ))
                         }
                     </ul>
                 </div>
                 <div className="col-4">
-                    <h4 className="text-center">{modoEdicion ? 'Editar Usuario' : 'Añadir Usuario'}</h4>
+                    <h4 className="text-center text-light">{modoEdicion ? 'Editar Usuario' : 'Añadir Usuario'}</h4>
                     <form onSubmit={modoEdicion ? editarUsuarios : guardarUsuario}>
                         <input type="text" className="form-control mb-2" placeholder="Ingrese nombre de usuario" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
                         <input type="text" className="form-control mb-2" placeholder="Ingrese nombre completo" value={nombre} onChange={(e) => setNombre(e.target.value)} />
@@ -269,8 +280,8 @@ const Formulario = () => {
                             {
                                 modoEdicion ? (
                                     <>
-                                        <button className="btn btn-info col-12 m-1" on='submit'>Editar</button>
-                                        <button className='btn btn-dark btn-block m-1' onClick={() => cancelar()}>Cancelar</button>
+                                        <button className="btn btn-dark col-12" on='submit'>Editar</button>
+                                        <button className='btn btn-danger btn-block' onClick={() => cancelar()}>Cancelar</button>
                                     </>
                                 ) :
                                     <button className='btn btn-dark btn-block'>Agregar</button>
