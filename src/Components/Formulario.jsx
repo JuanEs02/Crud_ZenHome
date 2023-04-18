@@ -1,6 +1,6 @@
-import React, { useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { db } from '../firebase'
-import { collection, doc, addDoc, onSnapshot, deleteDoc, updateDoc} from 'firebase/firestore'
+import { collection, doc, addDoc, onSnapshot, deleteDoc, updateDoc } from 'firebase/firestore'
 
 const Formulario = () => {
 
@@ -135,6 +135,7 @@ const Formulario = () => {
         } catch (error) {
             console.log(error)
         }
+        window.location.reload();
     }
 
     const eliminar = async id => {
@@ -156,7 +157,17 @@ const Formulario = () => {
                         {
                             listaUsuarios.map(item => (
                                 <li className="list-group-item" key={item.id}>
-                                    <span className="lead">{item.usuario}-{item.nombre}-{item.NID}-{item.correo}-{item.direccion}-{item.telefono}-{item.edad}</span>
+                                    <span className="lead">
+                                        Usuario: {item.usuario}<br>
+                                        </br>Nombre: {item.nombre}<br>
+                                        </br>NID: {item.NID}<br>
+                                        </br>Correo: {item.correo}<br>
+                                        </br>Dirección: {item.direccion}<br>
+                                        </br>Celular: {item.telefono}<br>
+                                        </br>Edad: {item.edad}<br>
+                                        </br>
+                                        <img className="img-fluid img-thumbnail rounded text-center" src={item.imagenaleatoria} alt="" /><br></br><br></br>
+                                    </span>
                                     <button className='btn btn-danger btn-sm fload-end mx-2' onClick={() => eliminar(item.id)}>Eliminar</button>
                                     <button className="btn btn-info btn-sm fload-end" onClick={() => editar(item)}>Editar</button>
                                 </li>
